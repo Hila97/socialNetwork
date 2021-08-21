@@ -6,9 +6,10 @@ import numpy as np
 import scipy as sp
 from collections import Counter
 from operator import itemgetter
+import scipy.special
 
 # יבוא דאטא ראשוני
-Data = open('ClaimFakeCOVID-19_tweets_replies_5.csv', "r")
+Data = open('fake_claim.csv', "r")
 next(Data, None)  # skip the first line in the input file
 Graphtype = nx.DiGraph()
 G = nx.parse_edgelist(Data, delimiter=',', create_using=Graphtype, nodetype=int, data=(('weight', float),))
@@ -36,13 +37,12 @@ for node in G:
 print("num of strongly cc ", nx.number_strongly_connected_components(G))
 print("num of weakly cc ", nx.number_weakly_connected_components(G))
 # print("all the components")
-b = sorted(nx.strongly_connected_components(G), key=len, reverse=True)
-# print("b", b)
+b = sorted(nx.weakly_connected_components(G), key=len, reverse=True)
+print("b", len(b))
+
 # a=[list(cc) for cc in nx.strongly_connected_components(G)]
 # print("connected com", a)
 #
-largest = len(b[0])
-print("largest connected components ", largest)
 
 # max=0
 # adam=0
@@ -60,11 +60,13 @@ print("largest connected components ", largest)
 # #print("allNodes",allNodes)
 
 # ציור רכיב הקשירות הגדול ביותר
+largest = len(b[0])
+print("largest connected components ", largest)
 NH = G.subgraph(b[0])
 nodes=list(NH.nodes)
 edges=list(NH.edges)
-print("largest connected components nodes",nodes)
-print("largest connected components edges",edges)
+print("largest connected components nodes",len(nodes))
+print("largest connected components edges",len(edges))
 color_map = []
 for node in NH:
     if node < 1000:
@@ -73,8 +75,8 @@ for node in NH:
         color_map.append('red')  # articles
     else:
         color_map.append('green')  # users
-# nx.draw(NH, node_color=color_map, with_labels=False)
-# plt.show()
+nx.draw(NH, node_color=color_map, with_labels=False)
+plt.show()
 
 
 
@@ -87,17 +89,18 @@ for node in NH:
 # print(s)
 ######## degree  histogram ###################33
 #
-degree_sequence = sorted([d for n, d in G.degree()], reverse=True)  # degree sequence
-print("degree",degree_sequence)
-degreeCount = collections.Counter(degree_sequence)
-deg, cnt = zip(*degreeCount.items())
-fig, ax = plt.subplots()
-plt.bar(deg, cnt, width=0.80, color="b")
-plt.title("Degree Histogram")
-plt.ylabel("Count")
-plt.yscale('log')
-plt.xlabel("Degree")
-plt.xscale('log')
+# degree_sequence = sorted([d for n, d in G.degree()], reverse=True)  # degree sequence
+# print("degree",degree_sequence)
+# degreeCount = collections.Counter(degree_sequence)
+# deg, cnt = zip(*degreeCount.items())
+# fig, ax = plt.subplots()
+# plt.bar(deg, cnt, width=0.80, color="b")
+# plt.title("Degree Histogram")
+# plt.ylabel("Count")
+# plt.yscale('log')
+# plt.xlabel("Degree")
+# plt.xscale('log')
+# plt.show()
 # ax.set_xticks([d + 0.4 for d in deg])
 # ax.set_xticklabels(deg)
 #
@@ -108,7 +111,7 @@ plt.xscale('log')
 #plt.axis("off")
 # # nx.draw_networkx_nodes(G, pos, node_size=20)
 # # nx.draw_networkx_edges(G, pos, alpha=0.4)
-plt.show()
+
 
 # מדדי מרכזיות
 
@@ -155,7 +158,39 @@ plt.show()
 # # # pos = nx.spring_layout(G)
 # plt.show()
 
-degree_sequence = sorted([d for n, d in NH.in_degree()], reverse=True)  # degree sequence
+# degree_sequence = sorted([d for n, d in NH.in_degree()], reverse=True)  # degree sequence
+# print("degree",degree_sequence)
+# degreeCount = collections.Counter(degree_sequence)
+# deg, cnt = zip(*degreeCount.items())
+# fig, ax = plt.subplots()
+# plt.bar(deg, cnt, width=0.80, color="b")
+# plt.title("Degree Histogram")
+# plt.ylabel("Count")
+# plt.yscale('log')
+# plt.xlabel("Degree")
+# plt.xscale('log')
+# plt.show()
+
+
+#מטלה 3
+#יצירת גרפים אקראיים
+#erdos
+ERG = nx.erdos_renyi_graph(len(nodes), 0.0083, seed=None, directed=False)
+# nx.draw(ERG, with_labels=False)
+# plt.show()
+print("nodes:",len(list(ERG.nodes)))
+print("edges:",len(list(ERG.edges)))
+
+#gilbart
+a=int(scipy.special.binom(len(nodes), 2)*0.0083)
+C=nx.dense_gnm_random_graph(len(nodes),len(edges))
+# nx.draw(C, with_labels=False)
+# plt.show()
+print("nodes:",len(list(C.nodes)))
+print("edges:",len(list(C.edges)))
+
+#התפלגות דרגות
+degree_sequence = sorted([d for n, d in NH.degree()], reverse=True)  # degree sequence
 print("degree",degree_sequence)
 degreeCount = collections.Counter(degree_sequence)
 deg, cnt = zip(*degreeCount.items())
@@ -163,7 +198,61 @@ fig, ax = plt.subplots()
 plt.bar(deg, cnt, width=0.80, color="b")
 plt.title("Degree Histogram")
 plt.ylabel("Count")
-plt.yscale('log')
 plt.xlabel("Degree")
 plt.xscale('log')
+plt.yscale('log')
 plt.show()
+
+#רכיבי קשירות בגרפים האקראיים- כי הם יצאו לא קשירים
+#רכיב קשירות הכי גדול בתוך ארדוס
+b = sorted(nx.connected_components(ERG), key=len, reverse=True)
+G2 = ERG.subgraph(b[0])
+nodes=list(G2.nodes)
+edges=list(G2.edges)
+print("largest connected components nodes",nodes)
+print("largest connected components edges",edges)
+print("num of nodes and edges", len(nodes),len(edges))
+# nx.draw(G2,with_labels=False)
+# plt.show()
+#רכיב קשירות הכי גדול בתוך גילברט
+b = sorted(nx.connected_components(C), key=len, reverse=True)
+G3 = C.subgraph(b[0])
+nodes=list(G3.nodes)
+edges=list(G3.edges)
+print("largest connected components nodes",nodes)
+print("largest connected components edges",edges)
+print("num of nodes and edges", len(nodes),len(edges))
+# nx.draw(G3,with_labels=False)
+# plt.show()
+#ממוצע מסלול
+print(nx.average_shortest_path_length(NH))
+print(nx.average_shortest_path_length(G2))
+print(nx.average_shortest_path_length(G3))
+
+#סוג נוסף של השוואה לפי דרגות
+# print(nx.average_neighbor_degree(NH))
+# print(nx.average_neighbor_degree(ERG))
+# print(nx.average_neighbor_degree(C))
+
+#ממוצע דרגות
+print("degree avg")
+degree_list=NH.degree(original_nodes)
+cnt=0
+for x in degree_list:
+    cnt+=x[1]
+avg=cnt/len(original_nodes)
+print(avg)
+
+degree_list=ERG.degree(list(ERG.nodes))
+cnt=0
+for x in degree_list:
+    cnt+=x[1]
+avg=cnt/len(list(ERG.nodes))
+print(avg)
+
+degree_list=C.degree(list(C.nodes))
+cnt=0
+for x in degree_list:
+    cnt+=x[1]
+avg=cnt/len(list(C.nodes))
+print(avg)

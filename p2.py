@@ -28,7 +28,7 @@ for node in G:
         color_map.append('green')  # users
 # nx.draw(G, node_color=color_map, with_labels=False)
 # plt.show()
-#
+
 # # רכיבי קשירות
 print("num of strongly cc ", nx.number_strongly_connected_components(G))
 print("num of weakly cc ", nx.number_weakly_connected_components(G))
@@ -70,8 +70,8 @@ for node in NH:
         color_map.append('red')  # articles
     else:
         color_map.append('green')  # users
-# nx.draw(NH, node_color=color_map, with_labels=False)
-# plt.show()
+nx.draw(NH, node_color=color_map, with_labels=False)
+plt.show()
 
 # # דרגות בגרף
 # # degree_sequence = sorted([d for n, d in G.degree()], reverse=True)
@@ -106,17 +106,17 @@ for node in NH:
 #
 # # מדדי מרכזיות
 
-print("degree centrality", nx.degree_centrality(G))
-print(nx.in_degree_centrality(G))
-print(nx.out_degree_centrality(G))
-print("betweenness", nx.betweenness_centrality(G, k=100, normalized=True, weight=None, endpoints=False, seed=None))
-print("pagerank", nx.pagerank(G, alpha=0.8))
-print("closeness", nx.closeness_centrality(G))
-
-degree_centrality=nx.degree_centrality(G)
-node_sizes=[]
-for x in degree_centrality.values():
-    node_sizes.append(x*1000)
+# print("degree centrality", nx.degree_centrality(G))
+# print(nx.in_degree_centrality(G))
+# print(nx.out_degree_centrality(G))
+# print("betweenness", nx.betweenness_centrality(G, k=100, normalized=True, weight=None, endpoints=False, seed=None))
+# print("pagerank", nx.pagerank(G, alpha=0.8))
+# print("closeness", nx.closeness_centrality(G))
+#
+# degree_centrality=nx.degree_centrality(G)
+# node_sizes=[]
+# for x in degree_centrality.values():
+#     node_sizes.append(x*1000)
 
 
 # betweenness=nx.betweenness_centrality(NH, k=None, normalized=True, weight=None, endpoints=False, seed=None)
@@ -136,5 +136,5 @@ for x in degree_centrality.values():
 #     node_sizes.append(x*1000)
 #
 
-nx.draw(G, node_color=color_map,node_size=node_sizes, with_labels=False)
-plt.show()
+# nx.draw(G, node_color=color_map,node_size=node_sizes, with_labels=False)
+# plt.show()
