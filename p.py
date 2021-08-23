@@ -175,32 +175,32 @@ plt.show()
 #מטלה 3
 #יצירת גרפים אקראיים
 #erdos
-ERG = nx.erdos_renyi_graph(len(nodes), 0.0083, seed=None, directed=False)
-# nx.draw(ERG, with_labels=False)
-# plt.show()
-print("nodes:",len(list(ERG.nodes)))
-print("edges:",len(list(ERG.edges)))
+# ERG = nx.erdos_renyi_graph(len(nodes), 0.0083, seed=None, directed=False)
+# # nx.draw(ERG, with_labels=False)
+# # plt.show()
+# print("nodes:",len(list(ERG.nodes)))
+# print("edges:",len(list(ERG.edges)))
 
 #gilbart
-a=int(scipy.special.binom(len(nodes), 2)*0.0083)
-C=nx.dense_gnm_random_graph(len(nodes),len(edges))
-# nx.draw(C, with_labels=False)
-# plt.show()
-print("nodes:",len(list(C.nodes)))
-print("edges:",len(list(C.edges)))
+# a=int(scipy.special.binom(len(nodes), 2)*0.0083)
+# C=nx.dense_gnm_random_graph(len(nodes),len(edges))
+# # nx.draw(C, with_labels=False)
+# # plt.show()
+# print("nodes:",len(list(C.nodes)))
+# print("edges:",len(list(C.edges)))
 
 #configuration
-degrees = []
-degree_list = NH.degree(original_nodes)
-for d in degree_list:
-    degrees.append(d[1])
-
-print(degrees)
-CM = nx.configuration_model(degrees, create_using=None, seed=None)
-nx.draw(CM, with_labels=False)
-plt.show()
-print("nodes:",len(list(CM.nodes)))
-print("edges:",len(list(CM.edges)))
+# degrees = []
+# degree_list = NH.degree(original_nodes)
+# for d in degree_list:
+#     degrees.append(d[1])
+#
+# print(degrees)
+# CM = nx.configuration_model(degrees, create_using=None, seed=None)
+# nx.draw(CM, with_labels=False)
+# plt.show()
+# print("nodes:",len(list(CM.nodes)))
+# print("edges:",len(list(CM.edges)))
 #התפלגות דרגות
 # degree_sequence = sorted([d for n, d in CM.degree()], reverse=True)  # degree sequence
 # print("degree",degree_sequence)
@@ -217,42 +217,42 @@ print("edges:",len(list(CM.edges)))
 
 #רכיבי קשירות בגרפים האקראיים- כי הם יצאו לא קשירים
 #רכיב קשירות הכי גדול בתוך ארדוס
-b = sorted(nx.connected_components(ERG), key=len, reverse=True)
-G2 = ERG.subgraph(b[0])
-nodes=list(G2.nodes)
-edges=list(G2.edges)
-print("largest connected components nodes",nodes)
-print("largest connected components edges",edges)
-print("num of nodes and edges", len(nodes),len(edges))
+# b = sorted(nx.connected_components(ERG), key=len, reverse=True)
+# G2 = ERG.subgraph(b[0])
+# nodes=list(G2.nodes)
+# edges=list(G2.edges)
+# print("largest connected components nodes",nodes)
+# print("largest connected components edges",edges)
+# print("num of nodes and edges", len(nodes),len(edges))
 # nx.draw(G2,with_labels=False)
 # plt.show()
 #רכיב קשירות הכי גדול בתוך גילברט
-b = sorted(nx.connected_components(C), key=len, reverse=True)
-G3 = C.subgraph(b[0])
-nodes=list(G3.nodes)
-edges=list(G3.edges)
-print("largest connected components nodes",nodes)
-print("largest connected components edges",edges)
-print("num of nodes and edges", len(nodes),len(edges))
+# b = sorted(nx.connected_components(C), key=len, reverse=True)
+# G3 = C.subgraph(b[0])
+# nodes=list(G3.nodes)
+# edges=list(G3.edges)
+# print("largest connected components nodes",nodes)
+# print("largest connected components edges",edges)
+# print("num of nodes and edges", len(nodes),len(edges))
 # nx.draw(G3,with_labels=False)
 # plt.show()
 
 #רכיב קשירות הכי גדול בקונפיג
-b = sorted(nx.connected_components(CM), key=len, reverse=True)
-G4 = CM.subgraph(b[0])
-nodes=list(G4.nodes)
-edges=list(G4.edges)
-print("largest connected components nodes",nodes)
-print("largest connected components edges",edges)
-print("num of nodes and edges", len(nodes),len(edges))
-nx.draw(G4,with_labels=False)
-plt.show()
+# b = sorted(nx.connected_components(CM), key=len, reverse=True)
+# G4 = CM.subgraph(b[0])
+# nodes=list(G4.nodes)
+# edges=list(G4.edges)
+# print("largest connected components nodes",nodes)
+# print("largest connected components edges",edges)
+# print("num of nodes and edges", len(nodes),len(edges))
+# nx.draw(G4,with_labels=False)
+# plt.show()
 
 #ממוצע מסלול
 # print(nx.average_shortest_path_length(NH))
 # print(nx.average_shortest_path_length(G2))
 # print(nx.average_shortest_path_length(G3))
-print(nx.average_shortest_path_length(G4))
+#print(nx.average_shortest_path_length(G4))
 
 #ממוצע דרגות
 # print("degree avg")
@@ -277,9 +277,39 @@ print(nx.average_shortest_path_length(G4))
 # avg=cnt/len(list(C.nodes))
 # print(avg)
 
-degree_list=CM.degree(list(CM.nodes))
-cnt=0
-for x in degree_list:
-    cnt+=x[1]
-avg=cnt/len(list(CM.nodes))
-print(avg)
+# degree_list=CM.degree(list(CM.nodes))
+# cnt=0
+# for x in degree_list:
+#     cnt+=x[1]
+# avg=cnt/len(list(CM.nodes))
+# print(avg)
+
+
+#ניסוי יצירת גרף רק משתמשים 1
+DG = nx.DiGraph()
+
+only_users=[]
+only_claims=[]
+for node in NH:
+    if node>1000 and node<1000000:
+        only_claims.append(node)
+    elif node >1000000:
+        only_users.append(node)  # users
+
+print(only_users)
+print(only_claims)
+
+DG.add_nodes_from(only_users)
+
+for l in only_claims:
+    claims_out = list(NH.successors(l))
+    claims_in = list(NH.predecessors(l))
+    print("for ",l , claims_out,claims_in)
+    for x in claims_in:
+        for y in claims_out:
+            DG.add_edge(x, y)
+
+nx.draw(DG, with_labels=False)
+plt.show()
+print("nodes:",len(list(DG.nodes)), "edges:",len(list(DG.edges)))
+
