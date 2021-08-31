@@ -7,6 +7,8 @@ import scipy as sp
 from collections import Counter
 from operator import itemgetter
 import scipy.special
+import seaborn as sns
+
 
 # יבוא דאטא ראשוני
 Data = open('fake_claim.csv', "r")
@@ -201,19 +203,29 @@ plt.show()
 # plt.show()
 # print("nodes:",len(list(CM.nodes)))
 # print("edges:",len(list(CM.edges)))
-#התפלגות דרגות
-# degree_sequence = sorted([d for n, d in CM.degree()], reverse=True)  # degree sequence
-# print("degree",degree_sequence)
-# degreeCount = collections.Counter(degree_sequence)
-# deg, cnt = zip(*degreeCount.items())
-# fig, ax = plt.subplots()
-# plt.bar(deg, cnt, width=0.80, color="b")
-# plt.title("Degree Histogram")
-# plt.ylabel("Count")
-# plt.xlabel("Degree")
-# plt.xscale('log')
-# plt.yscale('log')
-# plt.show()
+# התפלגות דרגות
+degree_sequence = sorted([d for n, d in NH.degree()], reverse=True)  # degree sequence
+print("degree",degree_sequence)
+degreeCount = collections.Counter(degree_sequence)
+deg, cnt = zip(*degreeCount.items())
+p=[]
+for x in cnt:
+    p.append(x/len(nodes))
+print("cnt",cnt)
+print("probabily",p)
+fig, ax = plt.subplots()
+plt.bar(deg, p, width=0.80, color="b")
+plt.title("Degree Histogram")
+plt.ylabel("probability")
+plt.xlabel("Degree")
+plt.xscale('log')
+plt.yscale('log')
+plt.show()
+
+sns.distplot(random.exponential(size=1000), hist=False)
+
+plt.show()
+#supported values are 'linear', 'log', 'symlog', 'logit', 'function', 'functionlog'
 
 #רכיבי קשירות בגרפים האקראיים- כי הם יצאו לא קשירים
 #רכיב קשירות הכי גדול בתוך ארדוס
@@ -286,30 +298,29 @@ plt.show()
 
 
 #ניסוי יצירת גרף רק משתמשים 1
-DG = nx.DiGraph()
-
-only_users=[]
-only_claims=[]
-for node in NH:
-    if node>1000 and node<1000000:
-        only_claims.append(node)
-    elif node >1000000:
-        only_users.append(node)  # users
-
-print(only_users)
-print(only_claims)
-
-DG.add_nodes_from(only_users)
-
-for l in only_claims:
-    claims_out = list(NH.successors(l))
-    claims_in = list(NH.predecessors(l))
-    print("for ",l , claims_out,claims_in)
-    for x in claims_in:
-        for y in claims_out:
-            DG.add_edge(x, y)
-
-nx.draw(DG, with_labels=False)
-plt.show()
-print("nodes:",len(list(DG.nodes)), "edges:",len(list(DG.edges)))
-
+# DG = nx.DiGraph()
+#
+# only_users=[]
+# only_claims=[]
+# for node in NH:
+#     if node>1000 and node<1000000:
+#         only_claims.append(node)
+#     elif node >1000000:
+#         only_users.append(node)  # users
+#
+# print(only_users)
+# print(only_claims)
+#
+# DG.add_nodes_from(only_users)
+#
+# for l in only_claims:
+#     claims_out = list(NH.successors(l))
+#     claims_in = list(NH.predecessors(l))
+#     print("for ",l , claims_out,claims_in)
+#     for x in claims_in:
+#         for y in claims_out:
+#             DG.add_edge(x, y)
+#
+# nx.draw(DG, with_labels=False)
+# plt.show()
+# print("nodes:",len(list(DG.nodes)), "edges:",len(list(DG.edges)))
