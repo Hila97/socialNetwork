@@ -205,10 +205,10 @@ plt.ylim([0, 1])
 plt.show()
 
 #התפלגות עם נרמול של העמודות
-# plt.hist(deg, bins=np.logspace(np.log10(1), np.log10(1000), 50), density=True, stacked=True, edgecolor='black')
-# plt.gca().set_xscale("log")
-# plt.gca().set_yscale("log")
-# plt.show()
+plt.hist(deg, bins=np.logspace(np.log10(1), np.log10(1000), 50), density=True, stacked=True, edgecolor='black')
+plt.gca().set_xscale("log")
+plt.gca().set_yscale("log")
+plt.show()
 #התפלגות מצטברת
 # plt.hist(deg, bins=np.logspace(np.log10(1), np.log10(1000), 50), density=True, stacked=True, edgecolor='black',
 #          cumulative=-1)

@@ -77,8 +77,8 @@ for node in NH:
         color_map.append('red')  # articles
     else:
         color_map.append('green')  # users
-nx.draw(NH, node_color=color_map, with_labels=False)
-plt.show()
+# nx.draw(NH, node_color=color_map, with_labels=False)
+# plt.show()
 
 
 
@@ -124,33 +124,35 @@ plt.show()
 # print("pagerank", nx.pagerank(G, alpha=0.8))
 # print("closeness", nx.closeness_centrality(G))
 
-# degree_centrality=nx.degree_centrality(NH)
+degree_centrality=nx.degree_centrality(NH)
+a={k: v for k, v in sorted(degree_centrality.items(), key=lambda item: item[1], reverse=True)}
+print("####################",a)
 # node_sizes=[]
 # for x in degree_centrality.values():
 #     node_sizes.append(x*1000)
 #
-# in_degree=nx.in_degree_centrality(NH)
+in_degree=nx.in_degree_centrality(NH)
 # node_sizes=[]
 # for x in in_degree.values():
 #     node_sizes.append(x*1000)
 
-# out_degree=nx.out_degree_centrality(NH)
+out_degree=nx.out_degree_centrality(NH)
 # node_sizes=[]
 # for x in out_degree.values():
 #     node_sizes.append(x*1000)
 
-# betweenness=nx.betweenness_centrality(NH, k=None, normalized=True, weight=None, endpoints=False, seed=None)
+betweenness=nx.betweenness_centrality(NH, k=None, normalized=True, weight=None, endpoints=False, seed=None)
 # node_sizes=[]
 # for x in betweenness.values():
 #     node_sizes.append(x*1000)
 
-# page_rank= nx.pagerank(NH, alpha=0.8)
+page_rank= nx.pagerank(NH, alpha=0.8)
 # node_sizes=[]
 # for x in page_rank.values():
 #     node_sizes.append(x*1000)
 
 
-# closeness=nx.closeness_centrality(NH)
+closeness=nx.closeness_centrality(NH)
 # node_sizes=[]
 # for x in closeness.values():
 #     node_sizes.append(x*1000)
@@ -204,28 +206,26 @@ plt.show()
 # print("nodes:",len(list(CM.nodes)))
 # print("edges:",len(list(CM.edges)))
 # התפלגות דרגות
-degree_sequence = sorted([d for n, d in NH.degree()], reverse=True)  # degree sequence
-print("degree",degree_sequence)
-degreeCount = collections.Counter(degree_sequence)
-deg, cnt = zip(*degreeCount.items())
-p=[]
-for x in cnt:
-    p.append(x/len(nodes))
-print("cnt",cnt)
-print("probabily",p)
-fig, ax = plt.subplots()
-plt.bar(deg, p, width=0.80, color="b")
-plt.title("Degree Histogram")
-plt.ylabel("probability")
-plt.xlabel("Degree")
-plt.xscale('log')
-plt.yscale('log')
-plt.show()
+# degree_sequence = sorted([d for n, d in NH.degree()], reverse=True)  # degree sequence
+# print("degree",degree_sequence)
+# degreeCount = collections.Counter(degree_sequence)
+# deg, cnt = zip(*degreeCount.items())
+# p=[]
+# for x in cnt:
+#     p.append(x/len(nodes))
+# print("cnt",cnt)
+# print("probabily",p)
+# fig, ax = plt.subplots()
+# plt.bar(deg, p, width=0.80, color="b")
+# plt.title("Degree Histogram")
+# plt.ylabel("probability")
+# plt.xlabel("Degree")
+# plt.xscale('log')
+# plt.yscale('log')
+# plt.show()
 
-sns.distplot(random.exponential(size=1000), hist=False)
-
-plt.show()
-#supported values are 'linear', 'log', 'symlog', 'logit', 'function', 'functionlog'
+# sns.distplot(random.exponential(size=1000), hist=False)
+# plt.show()
 
 #רכיבי קשירות בגרפים האקראיים- כי הם יצאו לא קשירים
 #רכיב קשירות הכי גדול בתוך ארדוס
@@ -298,29 +298,70 @@ plt.show()
 
 
 #ניסוי יצירת גרף רק משתמשים 1
-# DG = nx.DiGraph()
-#
-# only_users=[]
-# only_claims=[]
-# for node in NH:
-#     if node>1000 and node<1000000:
-#         only_claims.append(node)
-#     elif node >1000000:
-#         only_users.append(node)  # users
-#
-# print(only_users)
-# print(only_claims)
-#
-# DG.add_nodes_from(only_users)
-#
-# for l in only_claims:
-#     claims_out = list(NH.successors(l))
-#     claims_in = list(NH.predecessors(l))
-#     print("for ",l , claims_out,claims_in)
-#     for x in claims_in:
-#         for y in claims_out:
-#             DG.add_edge(x, y)
-#
+DG = nx.DiGraph()
+
+only_users=[]
+only_claims=[]
+for node in NH:
+    if node>1000 and node<1000000:
+        only_claims.append(node)
+    elif node >1000000:
+        only_users.append(node)  # users
+
+print(only_users)
+print(only_claims)
+
+DG.add_nodes_from(only_users)
+
+for l in only_claims:
+    claims_out = list(NH.successors(l))
+    claims_in = list(NH.predecessors(l))
+    for x in claims_in:
+        for y in claims_out:
+            DG.add_edge(x, y)
+
 # nx.draw(DG, with_labels=False)
 # plt.show()
-# print("nodes:",len(list(DG.nodes)), "edges:",len(list(DG.edges)))
+print("nodes:",len(list(DG.nodes)), "edges:",len(list(DG.edges)))
+print(sorted([d for n, d in DG.out_degree()], reverse=True))
+page_rank=nx.pagerank(DG, alpha=0.8)
+a=dict(sorted(page_rank.items(), reverse=True, key=lambda item: item[1]))
+print("page rank",a)
+
+closeness=nx.closeness_centrality(DG)
+a=dict(sorted(closeness.items(), reverse=True, key=lambda item: item[1]))
+print("closeness",a)
+# key=list(a.keys())
+# value=list(a.values())
+# fig, ax = plt.subplots()
+# # ax.fmt_ydata = millions
+# plt.plot(key, value, 'o')
+# plt.show()
+
+degree_sequence = sorted([d for n, d in DG.out_degree()], reverse=True)  # degree sequence
+print("degree",degree_sequence)
+
+#configuration
+degrees = []
+degree_list = DG.degree(original_nodes)
+for d in degree_list:
+    degrees.append(d[1])
+print(degrees)
+CM = nx.configuration_model(degrees, create_using=None, seed=None)
+# nx.draw(CM, with_labels=False)
+# plt.show()
+print("nodes:",len(list(CM.nodes)))
+print("edges:",len(list(CM.edges)))
+
+#erdos
+ERG = nx.erdos_renyi_graph(len(list(DG.nodes)), 0.56, seed=None, directed=False)
+# nx.draw(ERG, with_labels=False)
+# plt.show()
+print("nodes:",len(list(ERG.nodes)))
+print("edges:",len(list(ERG.edges)))
+
+clustering=nx.clustering(DG, nodes=None, weight=None)
+a=dict(sorted(clustering.items(), reverse=True, key=lambda item: item[1]))
+print("clustering",a)
+
+print(nx.transitivity(DG))

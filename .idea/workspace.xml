@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8f4e7581-f2fb-4e4b-a1f0-6c40e1eeb8aa" name="Default Changelist" comment="גרפים: מכוון הקשתות בין הכותבים למגיבים ללא צמתים של חדשות&#10;מכוון על דאטאבייס חדשות אמיתיות">
-      <change afterPath="$PROJECT_DIR$/4.py" afterDir="false" />
+    <list default="true" id="8f4e7581-f2fb-4e4b-a1f0-6c40e1eeb8aa" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/4.py" beforeDir="false" afterPath="$PROJECT_DIR$/4.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/p.py" beforeDir="false" afterPath="$PROJECT_DIR$/p.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/real_claim.py" beforeDir="false" afterPath="$PROJECT_DIR$/real_claim.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -26,7 +27,7 @@
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../hw1" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunDashboard">
@@ -41,7 +42,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.4">
+  <component name="RunManager" selected="Python.p">
     <configuration name="4" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="project" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -149,9 +150,9 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.4" />
         <item itemvalue="Python.p" />
         <item itemvalue="Python.real_claim" />
+        <item itemvalue="Python.4" />
         <item itemvalue="Python.p93" />
         <item itemvalue="Python.p2" />
       </list>
@@ -186,7 +187,13 @@
       <option name="presentableId" value="LOCAL‎00003" />
       <updated>1629715046572</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL‎00004" summary="מטלה 4">
+      <created>1630438481675</created>
+      <option name="number" value="LOCAL‎00004" />
+      <option name="presentableId" value="LOCAL‎00004" />
+      <updated>1630438481675</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -205,6 +212,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="assignment 3" />
     <MESSAGE value="גרפים: מכוון הקשתות בין הכותבים למגיבים ללא צמתים של חדשות&#10;מכוון על דאטאבייס חדשות אמיתיות" />
-    <option name="LAST_COMMIT_MESSAGE" value="גרפים: מכוון הקשתות בין הכותבים למגיבים ללא צמתים של חדשות&#10;מכוון על דאטאבייס חדשות אמיתיות" />
+    <MESSAGE value="מטלה 4" />
+    <option name="LAST_COMMIT_MESSAGE" value="מטלה 4" />
   </component>
 </project>
