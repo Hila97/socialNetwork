@@ -17,9 +17,8 @@ original_nodes = list(G.nodes)
 original_edges = list(G.edges)
 print("number of nodes ", len(original_nodes))
 print("number of edges ", len(original_edges))
-print("original_nodes", original_nodes)
-print("original_edges", original_edges)
-
+# print("original_nodes", original_nodes)
+# print("original_edges", original_edges)
 # ציור גרף מקורי
 color_map = []
 for node in G:
@@ -28,25 +27,29 @@ for node in G:
     elif node < 1000000:
         color_map.append('red')  # articles
     else:
-        color_map.append('green')  # users
+        color_map.append('#4a86e8')  # users
 # nx.draw(G, node_color=color_map, with_labels=False)
-# pos = nx.spring_layout(G)
+# #pos = nx.spring_layout(G)
+# plt.show()
 
 # רכיבי קשירות
-print("num of strongly cc ", nx.number_strongly_connected_components(G))
-print("num of weakly cc ", nx.number_weakly_connected_components(G))
+# print("num of strongly cc ", nx.number_strongly_connected_components(G))
+# print("num of weakly cc ", nx.number_weakly_connected_components(G))
 # print("all the components")
 b = sorted(nx.weakly_connected_components(G), key=len, reverse=True)
-print("b", len(b))
+# print("b", len(b))
 
 # ציור רכיב הקשירות הגדול ביותר
-largest = len(b[0])
-print("largest connected components ", largest)
+# largest = len(b[3])
+# print("largest connected components ", largest)
 NH = G.subgraph(b[0])
-nodes=list(NH.nodes)
-edges=list(NH.edges)
-print("largest connected components nodes",len(nodes))
-print("largest connected components edges",len(edges))
+nodes = list(NH.nodes)
+edges = list(NH.edges)
+print("***********************")
+# print("diameter",nx.diameter(NH.to_undirected()))
+# print("average",nx.average_shortest_path_length(NH))
+# print("largest connected components nodes", len(nodes))
+# print("largest connected components edges", len(edges))
 color_map = []
 for node in NH:
     if node < 1000:
@@ -54,7 +57,7 @@ for node in NH:
     elif node < 1000000:
         color_map.append('red')  # articles
     else:
-        color_map.append('green')  # users
+        color_map.append('#4a86e8')  # users
 # nx.draw(NH, node_color=color_map, with_labels=False)
 # plt.show()
 
@@ -128,7 +131,6 @@ for node in NH:
 # plt.show()
 
 
-
 # plt.hist(deg, bins=np.logspace(np.log10(1), np.log10(1000), 100), density=True, edgecolor='black')
 # plt.gca().set_xscale("log")
 # plt.gca().set_yscale("log")
@@ -169,33 +171,103 @@ for node in NH:
 # plt.show()
 
 
-#ניסוי יצירת גרף רק משתמשים 1
+# ניסוי יצירת גרף רק משתמשים 1
 DG = nx.DiGraph()
-
-only_users=[]
-only_claims=[]
+cnt = 0
+only_users = []
+only_claims = []
 for node in NH:
-    if node>1000 and node<1000000:
+    if node > 1000 and node < 1000000:
+        cnt = cnt + 1
         only_claims.append(node)
-    elif node >1000000:
+    elif node > 1000000:
         only_users.append(node)  # users
 
-print(only_users)
-print(only_claims)
+# print("articles", cnt)
+# print(only_users)
+# print(only_claims)
 
 DG.add_nodes_from(only_users)
 
 for l in only_claims:
     claims_out = list(NH.successors(l))
     claims_in = list(NH.predecessors(l))
-    #print("for ",l , claims_out,claims_in)
+    # print("for ",l , claims_out,claims_in)
     for x in claims_in:
         for y in claims_out:
             DG.add_edge(x, y)
 
 # nx.draw(DG, with_labels=False)
 # plt.show()
-print("nodes:",len(list(DG.nodes)), "edges:",len(list(DG.edges)))
+print("####################3")
+print("nodes:", len(list(DG.nodes)), "edges:", len(list(DG.edges)))
+# print("diameter",nx.diameter(DG.to_undirected()))
+# print("average", nx.average_shortest_path_length(DG))
+
+# remove = [node for node, degree in dict(DG.degree()).items() if degree == 1084]
+# DG.remove_nodes_from(remove)
+# # remove = [node for node, degree in dict(DG.degree()).items() if degree > 400]
+# # DG.remove_nodes_from(remove)
+# remove = [node for node, degree in dict(DG.degree()).items() if degree == 125]
+# DG.remove_nodes_from(remove)
+# remove = [node for node, degree in dict(DG.degree()).items() if 100 > degree > 10]
+# DG.remove_nodes_from(remove)
+# # nx.draw(DG, with_labels=False)
+# # plt.show()
+# print("nodes:", len(list(DG.nodes)), "edges:", len(list(DG.edges)))
+
+
+
+
+# התפלגות דרגות
+degree_sequence = DG.in_degree()
+print(degree_sequence)
+degree_sequence = sorted([d for n, d in DG.in_degree()], reverse=True)  # degree sequence
+print("degree", degree_sequence)
+degreeCount = collections.Counter(degree_sequence)
+deg, cnt = zip(*degreeCount.items())
+# print("deg",deg)
+# # p = []
+# # for x in cnt:
+# #     p.append(x / len(nodes))
+print("cnt", cnt)
+# # print("probabily", p)
+fig, ax = plt.subplots()
+plt.bar(deg, cnt, width=1, color="b")
+plt.title("Degree Histogram")
+plt.ylabel("count")
+plt.xlabel("Degree")
+plt.xscale('log')
+plt.yscale('log')
+plt.show()
+
+#התפלגות עם נרמול של העמודות
+plt.hist(deg, bins=np.logspace(np.log10(1), np.log10(1000), 50), density=True, stacked=True, edgecolor='black')
+plt.gca().set_xscale("log")
+plt.gca().set_yscale("log")
+plt.show()
+x=np.array(deg)
+y=np.array(cnt)
+
+#Applying a linear fit with .polyfit()
+fit = np.polyfit(x,y,1)
+ang_coeff = fit[0]
+intercept = fit[1]
+print(fit)
+fit_eq = ang_coeff*x + intercept  #obtaining the y axis values for the fitting function
+print(fit_eq)
+#Plotting the data
+fig = plt.figure()
+ax = fig.subplots()
+ax.plot(x, fit_eq,color = 'r', alpha = 0.5, label = 'Linear fit')
+ax.scatter(x,y,s = 5, color = 'b', label = 'Data points') #Original data points
+ax.set_title('Linear fit ')
+ax.legend()
+# plt.xscale('log')
+# plt.yscale('log')
+plt.show()
+
+
 
 # betweenness=nx.betweenness_centrality(DG, k=None, normalized=True, weight=None, endpoints=False, seed=None)
 # print(betweenness)
@@ -204,14 +276,14 @@ print("nodes:",len(list(DG.nodes)), "edges:",len(list(DG.edges)))
 #     node_sizes.append(x*1000)
 # nx.draw(DG, node_color=color_map,node_size=node_sizes, with_labels=False)
 # plt.show()
-print(sorted([d for n, d in DG.out_degree()], reverse=True))
-page_rank=nx.pagerank(DG, alpha=0.8)
-a=dict(sorted(page_rank.items(), reverse=True, key=lambda item: item[1]))
-print("page rank",a)
+# print(sorted([d for n, d in DG.out_degree()], reverse=True))
+page_rank = nx.pagerank(DG, alpha=0.8)
+a = dict(sorted(page_rank.items(), reverse=True, key=lambda item: item[1]))
+print("page rank", a)
 
-# closeness=nx.closeness_centrality(DG)
-# a=dict(sorted(closeness.items(), reverse=True, key=lambda item: item[1]))
-# print("closeness",a)
+closeness = nx.closeness_centrality(DG)
+a = dict(sorted(closeness.items(), reverse=True, key=lambda item: item[1]))
+print("closeness", a)
 # key=list(a.keys())
 # value=list(a.values())
 # fig, ax = plt.subplots()
@@ -219,27 +291,27 @@ print("page rank",a)
 # plt.plot(key, value, 'o')
 # plt.show()
 
-#configuration
-degrees = []
-degree_list = DG.degree(original_nodes)
-for d in degree_list:
-    degrees.append(d[1])
-print(degrees)
-CM = nx.configuration_model(degrees, create_using=None, seed=None)
+# configuration
+# degrees = []
+# degree_list = DG.degree(original_nodes)
+# for d in degree_list:
+#     degrees.append(d[1])
+# print(degrees)
+# CM = nx.configuration_model(degrees, create_using=None, seed=None)
 # nx.draw(CM, with_labels=False)
 # plt.show()
-print("nodes:",len(list(CM.nodes)))
-print("edges:",len(list(CM.edges)))
+# print("nodes:", len(list(CM.nodes)))
+# print("edges:", len(list(CM.edges)))
 
-#erdos
-ERG = nx.erdos_renyi_graph(len(list(DG.nodes)), 0.0385, seed=None, directed=False)
-# nx.draw(ERG, with_labels=False)
-# plt.show()
-print("nodes:",len(list(ERG.nodes)))
-print("edges:",len(list(ERG.edges)))
+# erdos
+# ERG = nx.erdos_renyi_graph(len(list(DG.nodes)), 0.0385, seed=None, directed=False)
+# # nx.draw(ERG, with_labels=False)
+# # plt.show()
+# print("nodes:", len(list(ERG.nodes)))
+# print("edges:", len(list(ERG.edges)))
 
-clustering=nx.clustering(DG, nodes=None, weight=None)
-a=dict(sorted(clustering.items(), reverse=True, key=lambda item: item[1]))
-print("clustering",a)
+clustering = nx.clustering(DG, nodes=None, weight=None)
+a = dict(sorted(clustering.items(), reverse=True, key=lambda item: item[1]))
+print("clustering", a)
 
 print(nx.transitivity(DG))
